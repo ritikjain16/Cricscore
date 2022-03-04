@@ -22,10 +22,10 @@ app.use(cors());
 
 mongoose
     .connect(conn_url, {
-        // useNewUrlParser: true,
-        // useCreateIndex: true,
-        // useUnifiedTopology: true,
-        // useFindAndModify: false,
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
     })
     .then(() => {
         console.log("Connection Successful");
