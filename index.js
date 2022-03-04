@@ -103,6 +103,16 @@ app.post("/updatematch", async (req, res) => {
 
 })
 
+
+app.post("/updatematchdetails/:matchid", async (req, res) => {
+    try {
+        const updatedata = await MatchList.updateOne({ _id: req.params.matchid }, { $set: req.body })
+        res.status(200).send(updatedata)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+})
+
 app.listen(port, (req, res) => {
     console.log(`Listening on ${port}`);
 })
