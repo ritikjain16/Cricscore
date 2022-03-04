@@ -1,15 +1,35 @@
-const dotenv = require('dotenv')
-dotenv.config()
-const express = require('express')
-const cors = require('cors')
-const app = express();
-require('./mongo.js')
-const MatchList = require('./overs.js')
+// const dotenv = require('dotenv')
+// const express = require('express')
+// const cors = require('cors')
+// const mongoose = require('mongoose')
+// require('./mongo.js')
+// const MatchList = require('./overs.js')
 
-const port = process.env.PORT || 5000;
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import MatchList from "./overs.js";
+dotenv.config();
+const app = express();
+const port = process.env.PORT || 8001;
+const conn_url = process.env.MONGOOSE_URL;
 
 app.use(express.json())
 app.use(cors())
+
+mongoose
+    .connect(conn_url, {
+        // useNewUrlParser: true,
+        // useCreateIndex: true,
+        // useUnifiedTopology: true,s
+        // useFindAndModify: false,
+    })
+    .then(() => {
+        console.log("Connection Successful");
+    })
+    .catch((err) => console.log(`no connection `));
+
 
 
 app.get('/getscore', async (req, res) => {
