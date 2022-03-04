@@ -23,9 +23,9 @@ app.use(cors());
 
 mongoose
     .connect(conn_url, {
-        useNewUrlParser: true,
+        // useNewUrlParser: true,
         // useCreateIndex: true,
-        useUnifiedTopology: true,
+        // useUnifiedTopology: true,
         // useFindAndModify: false,
     })
     .then(() => {
@@ -67,11 +67,13 @@ app.post("/updatematch", async (req, res) => {
 
     try {
         const findmatch = await MatchList.findOne({ _id: matchid, "overdetails.overno": overno });
+        // console.log(findmatch);
         if (findmatch) {
             try {
                 const updateBall = await MatchList.updateOne({ _id: matchid, "overdetails.overno": overno }, { $push: { "overdetails.$.balls": ball } })
                 res.status(200).send(updateBall)
             } catch (e) {
+                // console.log(e);
                 res.status(400).send(e)
             }
         }
@@ -83,7 +85,6 @@ app.post("/updatematch", async (req, res) => {
                 res.status(400).send(e)
             }
         }
-        res.status(200).send(findmatch)
     } catch (e) {
         res.status(400).send(e)
     }
