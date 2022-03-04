@@ -71,12 +71,20 @@ app.post("/updatematch", async (req, res) => {
     try {
         const findmatch = await MatchList.findOne({ _id: matchid, "overdetails.overno": overno });
         if (findmatch) {
-            const updateBall = await MatchList.updateOne({ _id: matchid, "overdetails.overno": overno }, { $push: { "overdetails.$.balls": ball } })
-            res.status(200).send(updateBall)
+            try {
+                const updateBall = await MatchList.updateOne({ _id: matchid, "overdetails.overno": overno }, { $push: { "overdetails.$.balls": ball } })
+                res.status(200).send(updateBall)
+            } catch (e) {
+                res.status(400).send(e)
+            }
         }
         else {
-            const newoverdata = await MatchList.updateOne({ _id: matchid }, { $push: { overdetails: { "overno": overno, "balls": [ball] } } });
-            res.status(200).send(newoverdata)
+            try {
+                const newoverdata = await MatchList.updateOne({ _id: matchid }, { $push: { overdetails: { "overno": overno, "balls": [ball] } } });
+                res.status(200).send(newoverdata)
+            } catch (e) {
+                res.status(400).send(e)
+            }
         }
         res.status(200).send(findmatch)
     } catch (e) {
