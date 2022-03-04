@@ -7,7 +7,8 @@ const matchSchema = mongoose.Schema({
     t1name: String,
     t2name: String,
     matchtstatus: String,
-    overdetails: Array
+    overdetails1: Array,
+    overdetails2: Array,
 })
 
 const MatchList = mongoose.model('matches', matchSchema);

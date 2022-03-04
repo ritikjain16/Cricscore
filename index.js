@@ -3,15 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-// require('./mongo.js')
 const MatchList = require('./overs.js')
-
-// import express from "express";
-// import cors from "cors";
-// import mongoose from "mongoose";
-// import dotenv from "dotenv";
-// import MatchList from "./overs.js";
-// import bodyParser from "body-parser";
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 8001;
@@ -22,12 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 mongoose
-    .connect(conn_url, {
-        // useNewUrlParser: true,
-        // useCreateIndex: true,
-        // useUnifiedTopology: true,
-        // useFindAndModify: false,
-    })
+    .connect(conn_url)
     .then(() => {
         console.log("Connection Successful");
     })
@@ -63,31 +50,57 @@ app.post("/additem", async (req, res) => {
 
 
 app.post("/updatematch", async (req, res) => {
-    const { overno, ball, matchid } = req.body;
+    const { overno, ball, matchid, team } = req.body;
 
-    try {
-        const findmatch = await MatchList.findOne({ _id: matchid, "overdetails.overno": overno });
-        // console.log(findmatch);
-        if (findmatch) {
-            try {
-                const updateBall = await MatchList.updateOne({ _id: matchid, "overdetails.overno": overno }, { $push: { "overdetails.$.balls": ball } })
-                res.status(200).send(updateBall)
-            } catch (e) {
-                // console.log(e);
-                res.status(400).send(e)
+    if (team === 1) {
+        try {
+            const findmatch = await MatchList.findOne({ _id: matchid, "overdetails1.overno": overno });
+            if (findmatch) {
+                try {
+                    const updateBall = await MatchList.updateOne({ _id: matchid, "overdetails1.overno": overno }, { $push: { "overdetails1.$.balls": ball } })
+                    res.status(200).send(updateBall)
+                } catch (e) {
+                    res.status(400).send(e)
+                }
             }
-        }
-        else {
-            try {
-                const newoverdata = await MatchList.updateOne({ _id: matchid }, { $push: { overdetails: { "overno": overno, "balls": [ball] } } });
-                res.status(200).send(newoverdata)
-            } catch (e) {
-                res.status(400).send(e)
+            else {
+                try {
+                    const newoverdata = await MatchList.updateOne({ _id: matchid }, { $push: { overdetails1: { "overno": overno, "balls": [ball] } } });
+                    res.status(200).send(newoverdata)
+                } catch (e) {
+                    res.status(400).send(e)
+                }
             }
+        } catch (e) {
+            res.status(400).send(e)
         }
-    } catch (e) {
-        res.status(400).send(e)
     }
+    else if (team === 2) {
+
+        try {
+            const findmatch = await MatchList.findOne({ _id: matchid, "overdetails2.overno": overno });
+            if (findmatch) {
+                try {
+                    const updateBall = await MatchList.updateOne({ _id: matchid, "overdetails2.overno": overno }, { $push: { "overdetails2.$.balls": ball } })
+                    res.status(200).send(updateBall)
+                } catch (e) {
+                    res.status(400).send(e)
+                }
+            }
+            else {
+                try {
+                    const newoverdata = await MatchList.updateOne({ _id: matchid }, { $push: { overdetails2: { "overno": overno, "balls": [ball] } } });
+                    res.status(200).send(newoverdata)
+                } catch (e) {
+                    res.status(400).send(e)
+                }
+            }
+        } catch (e) {
+            res.status(400).send(e)
+        }
+
+    }
+
 })
 
 app.listen(port, (req, res) => {
