@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose')
 
 const matchSchema = mongoose.Schema({
     title: String,
@@ -12,4 +12,4 @@ const matchSchema = mongoose.Schema({
 
 const MatchList = mongoose.model('matches', matchSchema);
 
-export default MatchList
+module.exports = MatchList
