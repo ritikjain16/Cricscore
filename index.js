@@ -19,12 +19,14 @@ app.use(express.json())
 app.use(cors())
 
 mongoose
-    .connect(conn_url, {
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useUnifiedTopology: true,
-        useFindAndModify: true,
-    })
+    .connect(conn_url
+        // , {
+        // useNewUrlParser: true,
+        // useCreateIndex: true,
+        // useUnifiedTopology: true,
+        // useFindAndModify: false,
+        // }
+    )
     .then(() => {
         console.log("Connection Successful");
     })
@@ -69,11 +71,11 @@ app.post("/updatematch", async (req, res) => {
     try {
         const findmatch = await MatchList.findOne({ _id: matchid, "overdetails.overno": overno });
         if (findmatch) {
-            const updateBall = await MatchList.updateOne({ _id: matchid, "overdetails.overno": overno }, { $push: { "overdetails.$.balls": ball } })
+            const updateBall = await MatchList.findOneAndUpdate({ _id: matchid, "overdetails.overno": overno }, { $push: { "overdetails.$.balls": ball } })
             res.status(200).send(updateBall)
         }
         else {
-            const newoverdata = await MatchList.updateOne({ _id: matchid }, { $push: { overdetails: { "overno": overno, "balls": [ball] } } });
+            const newoverdata = await MatchList.findOneAndUpdate({ _id: matchid }, { $push: { overdetails: { "overno": overno, "balls": [ball] } } });
             res.status(200).send(newoverdata)
         }
         res.status(200).send(findmatch)
