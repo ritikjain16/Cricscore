@@ -10,13 +10,15 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import MatchList from "./overs.js";
+import bodyParser from "body-parser";
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 8001;
 const conn_url = process.env.MONGOOSE_URL;
 
-app.use(express.json())
-app.use(cors())
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(cors());
 
 mongoose
     .connect(conn_url, {
