@@ -6,7 +6,7 @@ const app = express();
 require('./mongo.js')
 const MatchList = require('./overs.js')
 
-const PORT = process.env.PORT || 5000;
+const port = process.env.PORT || 5000;
 
 app.use(express.json())
 app.use(cors())
@@ -24,7 +24,7 @@ app.get('/getscore', async (req, res) => {
 
 app.get('/getmatch/:matchid', async (req, res) => {
     try {
-        const overdata = await MatchList.findOne({_id:req.params.matchid});
+        const overdata = await MatchList.findOne({ _id: req.params.matchid });
         res.status(200).send(overdata)
     } catch (e) {
         res.status(400).send(e)
@@ -62,7 +62,7 @@ app.post("/updatematch", async (req, res) => {
     }
 })
 
-app.listen(PORT, (req, res) => {
-    console.log(`Listening on ${PORT}`);
+app.listen(port, (req, res) => {
+    console.log(`Listening on ${port}`);
 })
 
